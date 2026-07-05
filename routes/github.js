@@ -3,9 +3,8 @@ import crypto from "crypto";
 
 
 export const githubRoutes = (req, res) => {
-    console.log(req.headers);
-    console.log(req.body);
-    const givenSignature = req.header["x-hub-signature-256"];
+
+    const givenSignature = req.headers["x-hub-signature-256"];
     if (!givenSignature) {
         return res.status(400).json({ error: "Invalid signature!" })
     }
