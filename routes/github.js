@@ -9,7 +9,7 @@ export const githubRoutes = (req, res) => {
     if (!givenSignature) {
         return res.status(400).json({ error: "Invalid signature!" })
     }
-    const expectedSignature = crypto.createHmac("sha256", "mir-haadi977#@").update(JSON.stringify(req.body)).digest("hex");
+    const expectedSignature = "sha256=" + crypto.createHmac("sha256", process.env.GITHUB_WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest("hex");
 
     if (expectedSignature !== givenSignature) {
         return res.status(400).json({ error: "Invalid signature!!" })

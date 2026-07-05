@@ -1,6 +1,8 @@
 import express from "express";
+import dotenv from "dotenv";
 import { githubRoutes } from "./routes/github.js";
 
+dotenv.config();
 const app = express();
 app.use(express.json());
 
