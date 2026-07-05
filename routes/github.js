@@ -1,8 +1,19 @@
 import { spawn } from "child_process";
+import crypto from "crypto";
 
 
 export const githubRoutes = (req, res) => {
+    console.log(req.headers);
     console.log(req.body);
+    const givenSignature = req.header["x-webhook-signature"];
+    if (!givenSignature) {
+        return res.sendStatus(400).json({ error: "Invalid signature!" })
+    }
+    const expectedSignature = crypto.createHmac("sha256", process.env.GITHUB_WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest("hex");
+
+    if (expectedSignature !== givenSignature) {
+        return res.sendStatus(400).json({ error: "Invalid signature!!" })
+    }
     res.json({ message: "Deployment triggered ..." })
 
     const bashChildProcess = spawn("bash", [`/home/ubuntu/deploy-frontend.sh`]);
@@ -26,5 +37,5 @@ export const githubRoutes = (req, res) => {
     bashChildProcess.on("error", (err) => {
         console.log("Error occurred in spawning the process!", err);
     })
-    
+
 }
