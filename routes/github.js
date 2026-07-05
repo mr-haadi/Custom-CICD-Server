@@ -5,7 +5,7 @@ export const githubRoutes = (req, res) => {
     console.log(req.body);
     res.json({ message: "Deployment triggered ..." })
 
-    const bashChildProcess = spawn("bash", ["script.sh"]);
+    const bashChildProcess = spawn("bash", [`/home/ubuntu/deploy-frontend.sh`]);
 
     bashChildProcess.stdout.on("data", (data) => {
         process.stdout.write(data)
