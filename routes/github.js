@@ -5,14 +5,14 @@ import crypto from "crypto";
 export const githubRoutes = (req, res) => {
     console.log(req.headers);
     console.log(req.body);
-    const givenSignature = req.header["x-webhook-signature"];
+    const givenSignature = req.header["x-hub-signature-256"];
     if (!givenSignature) {
-        return res.sendStatus(400).json({ error: "Invalid signature!" })
+        return res.status(400).json({ error: "Invalid signature!" })
     }
-    const expectedSignature = crypto.createHmac("sha256", process.env.GITHUB_WEBHOOK_SECRET).update(JSON.stringify(req.body)).digest("hex");
+    const expectedSignature = crypto.createHmac("sha256", "mir-haadi977#@").update(JSON.stringify(req.body)).digest("hex");
 
     if (expectedSignature !== givenSignature) {
-        return res.sendStatus(400).json({ error: "Invalid signature!!" })
+        return res.status(400).json({ error: "Invalid signature!!" })
     }
     res.json({ message: "Deployment triggered ..." })
 
