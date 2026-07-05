@@ -3,7 +3,6 @@ import crypto from "crypto";
 
 
 export const githubRoutes = (req, res) => {
-
     const givenSignature = req.headers["x-hub-signature-256"];
     if (!givenSignature) {
         return res.status(400).json({ error: "Invalid signature!" })
@@ -15,7 +14,9 @@ export const githubRoutes = (req, res) => {
     }
     res.json({ message: "Deployment triggered ..." })
 
-    const bashChildProcess = spawn("bash", [`/home/ubuntu/deploy-frontend.sh`]);
+    const repository = req.body.repository.name;
+
+    const bashChildProcess = spawn("bash", [`/home/ubuntu/deploy-${repository}.sh`]);
 
     bashChildProcess.stdout.on("data", (data) => {
         process.stdout.write(data)
